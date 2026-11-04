@@ -680,3 +680,65 @@ body.shielded .shield {
   body.in-exam * { display: none !important; }
   body.in-exam::after { content: 'Printing is not allowed during the exam.'; display: block; padding: 40px; }
 }
+
+/* ===== Accounts and shop ===== */
+.account-link { white-space: nowrap; }
+.exam-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.auth-card { max-width: 440px; margin: 0 auto; }
+.auth-links { margin-top: 16px; }
+.mt-sm { margin-top: 8px; }
+.filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.shop-exam { margin: 32px 0 16px; }
+.shop-exam:first-child { margin-top: 0; }
+.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.product-card {
+  display: flex; flex-direction: column; gap: 8px; padding: 20px; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.product-card .chip { align-self: flex-start; }
+.product-card.course { border-color: var(--accent); }
+.product-card.course .chip { background: var(--accent-soft); color: var(--accent); }
+.product-card h3 { font-size: 1.05rem; margin: 0; }
+.product-card p { flex: 1; margin: 0; }
+.product-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.price { font-size: 1.25rem; font-weight: 800; }
+.price.big { font-size: 2rem; margin: 8px 0 0; }
+.pay-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.pay-tab {
+  padding: 12px 8px; border-radius: 12px; border: 2px solid var(--line); background: var(--surface);
+  color: var(--ink); font: 700 .95rem var(--font); cursor: pointer;
+}
+.pay-tab.on { border-color: var(--pc, var(--accent)); color: var(--pc, var(--accent)); background: color-mix(in srgb, var(--pc, var(--accent)) 10%, transparent); }
+.pay-bkash { --pc: #e2136e; }
+.pay-nagad { --pc: #ec1c24; }
+.pay-rocket { --pc: #8c3494; }
+.pay-bank { --pc: var(--n4); }
+.pay-box { padding: 16px 20px; border-radius: 12px; background: var(--bg-alt); margin-bottom: 16px; }
+.pay-steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.pay-dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 0 0 8px; }
+.pay-dl dt { color: var(--muted); }
+.pay-dl dd { margin: 0; }
+.copy { -webkit-user-select: all; user-select: all; font-family: ui-monospace, monospace; letter-spacing: .03em; }
+.account-grid { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+.account-grid > div, .account-grid > aside { display: grid; gap: 20px; }
+.redeem-form { display: flex; gap: 8px; }
+.redeem-form input {
+  flex: 1; min-width: 0; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--ink); font: 500 1rem var(--font);
+}
+.redeem-form input[name="code"] { font: 600 1rem ui-monospace, monospace; text-transform: uppercase;
+}
+.order-row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.order-row:last-child { border-bottom: 0; }
+.status-pill { align-self: flex-start; white-space: nowrap; font-size: .75rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--bg-alt); color: var(--warn); }
+.status-pill.approved { background: var(--ok-soft); color: var(--ok); }
+.status-pill.rejected { background: var(--bad-soft); color: var(--bad); }
+.notice-bar.ok { background: var(--ok-soft); color: var(--ok); }
+.pass { color: var(--ok); }
+.fail { color: var(--bad); }
+.admin-table td { vertical-align: top; }
+.admin-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; min-width: 170px; }
+.admin-out { flex-basis: 100%; }
+.narrow-card { max-width: 520px; }
+@media (max-width: 960px) { .account-grid { grid-template-columns: 1fr; } }
+@media (max-width: 720px) { .account-link { padding: 6px 10px; font-size: .8rem; } }

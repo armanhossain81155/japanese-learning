@@ -247,6 +247,7 @@ async function startLiveExam(ex, student) {
 
 function saveLiveProgress() {
   if (!exam || !exam.live) return;
+  if (exam.live.paid) return paidBeat();
   const answers = {}, orders = {};
   exam.items.forEach((it, i) => {
     orders[it.q.id] = it.q.order;
@@ -274,6 +275,7 @@ async function resumeLive(id) {
 }
 
 async function submitLive(timeUp) {
+  if (exam.live.paid) return submitPaid(timeUp);
   if (exam.live.submitting) return;
   exam.live.submitting = true;
   const { ex, student, tabSwitches, shots } = exam.live;

@@ -582,7 +582,7 @@ const TIPS = [
 // Exams shown on the home page. Only JLPT has tests so far; the others are announced as coming soon.
 const EXAMS = [
   {
-    id: 'jlpt', name: 'JLPT', jp: '日本語能力試験', color: 'var(--n3)', ready: true, href: '#/tests',
+    id: 'jlpt', name: 'JLPT', jp: '日本語能力試験', color: 'var(--n3)', ready: true, href: '#/tests', shop: 'JLPT',
     desc: T('Japanese-Language Proficiency Test. Needed for study, jobs and visas in Japan.',
       'জাপানি ভাষা দক্ষতা পরীক্ষা। জাপানে পড়াশোনা, চাকরি ও ভিসার জন্য দরকার।'),
     chips: ['N5', 'N4', 'N3']

@@ -31,11 +31,13 @@
       <nav class="nav-links" id="navLinks">
         <a href="#/" data-route="home" data-i18n="nav.home">Home</a>
         <a href="#/tests" data-route="tests" data-i18n="nav.tests">Mock Tests</a>
+        <a href="#/shop" data-route="shop" data-i18n="nav.shop">Buy Tests</a>
         <a href="#/live" data-route="live" data-i18n="nav.live" class="nav-live">Live Exam</a>
         <a href="#/study" data-route="study" data-i18n="nav.study">Kana</a>
         <a href="#/history" data-route="history" data-i18n="nav.history">My Results</a>
       </nav>
       <div class="nav-actions">
+        <a class="btn btn-ghost btn-sm account-link" id="accountLink" href="#/login" hidden>Login</a>
         <button class="lang-btn" id="langToggle" data-i18n-attr="aria-label:lang.title">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
           <span data-i18n="lang.switch">বাংলা</span>
@@ -83,8 +85,10 @@
   <script src="data.js"></script>
   <script src="i18n.js"></script>
   <script src="live-config.js"></script>
+  <script src="backend-config.js"></script>
   <script src="live.js"></script>
   <script src="protect.js"></script>
+  <script src="shop.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

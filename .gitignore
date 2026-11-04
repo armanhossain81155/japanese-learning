@@ -1,3 +1,8 @@
 # Private: test answers must not go online
 model-tests/answer-keys/
 model-tests/live-keys/
+
+# Paid tests: questions are uploaded to Supabase (model-tests/upload-test.js), not published.
+# Only the free demo test stays public.
+model-tests/questions/*/*
+!model-tests/questions/N5/test-01.json

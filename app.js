@@ -184,6 +184,7 @@ function startExam(levelId, mode) {
 }
 
 function endExam() {
+  stopPaid();
   if (exam && exam.timerId) clearInterval(exam.timerId);
   stopSpeech();
   exam = null;
@@ -318,8 +319,11 @@ function examCard(ex) {
       <h3 class="jp">${ex.jp}</h3>
       <p class="muted">${L(ex.desc)}</p>
       <ul class="exam-chips">${ex.chips.map(c => `<li>${typeof c === 'string' ? c : L(c)}</li>`).join('')}</ul>
-      ${ex.ready ? `<a class="btn btn-primary btn-sm" href="${ex.href}">${t('exams.open')}</a>`
-        : `<span class="btn btn-ghost btn-sm" aria-disabled="true">${t('exams.soon')}</span>`}
+      <div class="exam-actions">
+        ${ex.ready ? `<a class="btn btn-primary btn-sm" href="${ex.href}">${t('exams.open')}</a>
+          ${shopOn ? `<a class="btn btn-ghost btn-sm" href="#/shop/${ex.shop}">${t('exams.buy')}</a>` : ''}`
+          : `<span class="btn btn-ghost btn-sm" aria-disabled="true">${t('exams.soon')}</span>`}
+      </div>
     </article>`;
 }
 
@@ -531,6 +535,11 @@ function renderLevel(levelId) {
         </div>
 
         <aside>
+          ${shopOn ? `<div class="card buy-card">
+            <h3>${t('level.buyTitle')}</h3>
+            <p class="small muted">${t('level.buyText')}</p>
+            <a class="btn btn-primary btn-block" href="#/shop/JLPT-${level.id}">${t('level.buyBtn')}</a>
+          </div>` : ''}
           <div class="card">
             <h3>${t('level.official')}</h3>
             <table class="table compact">
@@ -1021,14 +1030,15 @@ function renderNotFound() {
 function router({ keepScroll = false } = {}) {
   const [route = '', a, b] = location.hash.replace(/^#\/?/, '').split('/');
 
-  const examRoute = route === 'exam' || (route === 'live' && b === 'run');
+  const examRoute = route === 'exam' || ((route === 'live' || route === 'my') && b === 'run');
   if (!examRoute && exam) endExam();
   stopLiveTimer();
   if (route !== 'result') reviewFilter = 'all';
   document.body.classList.remove('menu-open');
+  updateAccountLink();
   $$('#navLinks a').forEach(l => {
     const r = l.dataset.route;
-    l.classList.toggle('active', r === (route || 'home') || (r === 'tests' && route === 'test'));
+    l.classList.toggle('active', r === (route || 'home') || (r === 'tests' && route === 'test') || (r === 'shop' && route === 'buy'));
   });
 
   switch (route) {
@@ -1043,6 +1053,12 @@ function router({ keepScroll = false } = {}) {
     case 'history': renderHistory(); break;
     case 'study': renderStudy(); break;
     case 'live': renderLive(a, b); break;
+    case 'login': case 'signup': case 'forgot': case 'new-password': renderAuth(route); break;
+    case 'shop': renderShop(a); break;
+    case 'buy': renderBuy(a); break;
+    case 'account': renderAccount(); break;
+    case 'my': renderMy(a, b); break;
+    case 'admin': renderAdmin(a); break;
     default: renderNotFound();
   }
   if (!keepScroll && (!examRoute || !exam || exam.cur === 0)) window.scrollTo(0, 0);
@@ -1102,4 +1118,5 @@ $('#menuBtn').onclick = () => document.body.classList.toggle('menu-open');
 $('#year').textContent = new Date().getFullYear();
 
 applyStaticI18n();
+shopInit();
 router();
