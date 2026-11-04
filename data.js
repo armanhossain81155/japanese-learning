@@ -579,6 +579,34 @@ const TIPS = [
   }
 ];
 
+// SSW (特定技能) job fields with mock tests planned. Each field has its own skill test.
+const SSW_FIELDS = [
+  { id: 'care', jp: '介護', icon: '介',
+    name: T('Caregiver', 'কেয়ারগিভার'),
+    desc: T('Nursing care skills test, plus the Care Japanese test (介護日本語評価試験).',
+      'নার্সিং কেয়ার দক্ষতা পরীক্ষা, সাথে কেয়ার জাপানি পরীক্ষা (介護日本語評価試験)।') },
+  { id: 'food-mfg', jp: '飲食料品製造業', icon: '製',
+    name: T('Food manufacturing', 'খাদ্য প্রস্তুতকরণ'),
+    desc: T('Food and beverage factory work: hygiene, HACCP and safe production.',
+      'খাদ্য ও পানীয় কারখানার কাজ: স্বাস্থ্যবিধি, HACCP ও নিরাপদ উৎপাদন।') },
+  { id: 'agri', jp: '農業', icon: '農',
+    name: T('Agriculture', 'কৃষি'),
+    desc: T('Crop farming (耕種農業) or livestock farming (畜産農業).',
+      'ফসল চাষ (耕種農業) অথবা পশুপালন (畜産農業)।') },
+  { id: 'auto', jp: '自動車整備', icon: '車',
+    name: T('Automobile', 'অটোমোবাইল'),
+    desc: T('Car maintenance and repair: inspection, parts and tools.',
+      'গাড়ি রক্ষণাবেক্ষণ ও মেরামত: পরিদর্শন, যন্ত্রাংশ ও সরঞ্জাম।') },
+  { id: 'food-service', jp: '外食業', icon: '食',
+    name: T('Food service', 'ফুড সার্ভিস'),
+    desc: T('Restaurant work: cooking, customer service and food hygiene.',
+      'রেস্টুরেন্টের কাজ: রান্না, গ্রাহক সেবা ও খাদ্য স্বাস্থ্যবিধি।') },
+  { id: 'hotel', jp: '宿泊', icon: '宿',
+    name: T('Hotel / Accommodation', 'হোটেল / আবাসন'),
+    desc: T('Hotel work: front desk, guest service, restaurant and safety.',
+      'হোটেলের কাজ: ফ্রন্ট ডেস্ক, অতিথি সেবা, রেস্টুরেন্ট ও নিরাপত্তা।') }
+];
+
 // Exams shown on the home page. Only JLPT has tests so far; the others are announced as coming soon.
 const EXAMS = [
   {
@@ -597,7 +625,7 @@ const EXAMS = [
     id: 'ssw', name: 'SSW', jp: '特定技能評価試験', color: 'var(--warn)',
     desc: T('Specified Skilled Worker skill tests. Each job field has its own test.',
       'স্পেসিফাইড স্কিলড ওয়ার্কার (তোকুতেই গিনো) দক্ষতা পরীক্ষা। প্রতিটি কাজের ক্ষেত্রের আলাদা পরীক্ষা।'),
-    chips: ['介護', '外食業', '飲食料品製造業', '農業', 'ビルクリーニング']
+    chips: ['介護', '飲食料品製造業', '農業', '自動車整備', '外食業', '宿泊'], href: '#/tests/ssw'
   },
   {
     id: 'nat', name: 'NAT-TEST', jp: '日本語NAT-TEST', color: 'var(--n5)',

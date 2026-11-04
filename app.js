@@ -322,6 +322,7 @@ function examCard(ex) {
       <div class="exam-actions">
         ${ex.ready ? `<a class="btn btn-primary btn-sm" href="${ex.href}">${t('exams.open')}</a>
           ${shopOn ? `<a class="btn btn-ghost btn-sm" href="#/shop/${ex.shop}">${t('exams.buy')}</a>` : ''}`
+          : ex.href ? `<a class="btn btn-ghost btn-sm" href="${ex.href}">${t('exams.fields')}</a>`
           : `<span class="btn btn-ghost btn-sm" aria-disabled="true">${t('exams.soon')}</span>`}
       </div>
     </article>`;
@@ -454,7 +455,20 @@ function renderHome() {
     </section>`;
 }
 
-function renderTests() {
+function sswCard(f) {
+  return `
+    <article class="ssw-card">
+      <span class="ssw-icon jp" aria-hidden="true">${f.icon}</span>
+      <div>
+        <h3>${L(f.name)}</h3>
+        <p class="jp small muted">${f.jp}</p>
+        <p class="small muted">${L(f.desc)}</p>
+      </div>
+      <span class="chip">${t('exams.soon')}</span>
+    </article>`;
+}
+
+function renderTests(focus) {
   app.innerHTML = `
     <section class="page-head">
       <div class="container">
@@ -483,7 +497,20 @@ function renderTests() {
           </table>
         </div>
       </div>
+    </section>
+
+    <section class="section tight" id="ssw">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">特定技能 · SSW</span>
+          <h2>${t('tests.sswTitle')}</h2>
+          <p class="muted">${t('tests.sswSub')}</p>
+        </div>
+        <div class="ssw-grid">${SSW_FIELDS.map(sswCard).join('')}</div>
+        <p class="small muted mt-lg">${t('tests.sswNote')}</p>
+      </div>
     </section>`;
+  if (focus) document.getElementById(focus)?.scrollIntoView();
 }
 
 function renderLevel(levelId) {
@@ -1043,7 +1070,7 @@ function router({ keepScroll = false } = {}) {
 
   switch (route) {
     case '': renderHome(); break;
-    case 'tests': renderTests(); break;
+    case 'tests': renderTests(a); break;
     case 'test': renderLevel(a); break;
     case 'exam':
       if (!exam || exam.hash !== location.hash) startExam(a, b || 'all');
@@ -1061,7 +1088,7 @@ function router({ keepScroll = false } = {}) {
     case 'admin': renderAdmin(a); break;
     default: renderNotFound();
   }
-  if (!keepScroll && (!examRoute || !exam || exam.cur === 0)) window.scrollTo(0, 0);
+  if (!keepScroll && !(route === 'tests' && a) && (!examRoute || !exam || exam.cur === 0)) window.scrollTo(0, 0);
 }
 
 // Warn before leaving an exam in progress

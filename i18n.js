@@ -527,6 +527,10 @@ function applyStaticI18n() {
 
 // ===== Accounts, shop and paid tests (shop.js) =====
 Object.assign(I18N.en, {
+  'exams.fields': 'See fields',
+  'tests.sswTitle': 'SSW skill test mock tests',
+  'tests.sswSub': 'Specified Skilled Worker (Tokutei Ginou) mock tests by job field. Coming soon.',
+  'tests.sswNote': 'For the SSW visa you need the skill test of your field and a Japanese test: JFT-Basic or JLPT N4. Caregivers also take the Care Japanese test.',
   'nav.shop': 'Buy Tests',
   'nav.account': 'My Account',
   'nav.login': 'Login',
@@ -674,6 +678,10 @@ Object.assign(I18N.en, {
 });
 
 Object.assign(I18N.bn, {
+  'exams.fields': 'ক্ষেত্রগুলো দেখুন',
+  'tests.sswTitle': 'SSW দক্ষতা পরীক্ষার মক টেস্ট',
+  'tests.sswSub': 'কাজের ক্ষেত্র অনুযায়ী স্পেসিফাইড স্কিলড ওয়ার্কার (তোকুতেই গিনো) মক টেস্ট। শীঘ্রই আসছে।',
+  'tests.sswNote': 'SSW ভিসার জন্য আপনার ক্ষেত্রের দক্ষতা পরীক্ষা এবং একটি জাপানি ভাষা পরীক্ষা লাগবে: JFT-Basic অথবা JLPT N4। কেয়ারগিভারদের কেয়ার জাপানি পরীক্ষাও দিতে হয়।',
   'nav.shop': 'টেস্ট কিনুন',
   'nav.account': 'আমার অ্যাকাউন্ট',
   'nav.login': 'লগইন',

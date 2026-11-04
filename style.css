@@ -746,3 +746,19 @@ body.shielded .shield {
   position: sticky; top: 0; z-index: 100; padding: 8px 16px; text-align: center;
   background: var(--warn); color: #1a1200; font-size: .85rem; font-weight: 600;
 }
+
+/* ===== SSW fields (Mock Tests page) ===== */
+.ssw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.ssw-card {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; padding: 18px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.ssw-card h3 { font-size: 1rem; margin: 0; }
+.ssw-card p { margin: 2px 0 0; }
+.ssw-icon {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px;
+  background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn);
+  font: 700 1.3rem var(--font-serif);
+}
+@media (max-width: 960px) { .ssw-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 720px) { .ssw-grid { grid-template-columns: 1fr; } }
