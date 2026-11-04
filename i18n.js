@@ -593,7 +593,7 @@ Object.assign(I18N.en, {
   'pay.submit': 'I have paid',
   'pay.after': (h) => `We check payments within ${h} hours and email your access code.`,
   'pay.help': (s) => `Need help? ${s}`,
-  'pay.none': 'Payment details are not set up yet. Please check back soon.',
+  'pay.soon': (m) => `${m} payment is coming soon. Please choose another method, or check back later.`,
   'pay.doneTitle': 'Payment received for checking',
   'pay.doneText': (h) => `We will check your payment within ${h} hours. Your access code will arrive by email; you can also follow the status in My Account.`,
 
@@ -740,7 +740,7 @@ Object.assign(I18N.bn, {
   'pay.submit': 'পেমেন্ট করেছি',
   'pay.after': (h) => `আমরা ${h} ঘণ্টার মধ্যে পেমেন্ট যাচাই করে ইমেইলে অ্যাক্সেস কোড পাঠাই।`,
   'pay.help': (s) => `সাহায্য লাগলে: ${s}`,
-  'pay.none': 'পেমেন্টের তথ্য এখনো দেওয়া হয়নি। কিছুদিন পর আবার দেখুন।',
+  'pay.soon': (m) => `${m} পেমেন্ট শীঘ্রই চালু হবে। অন্য মাধ্যম বেছে নিন, অথবা কিছুদিন পর আবার দেখুন।`,
   'pay.doneTitle': 'পেমেন্ট যাচাইয়ের জন্য জমা হয়েছে',
   'pay.doneText': (h) => `আমরা ${h} ঘণ্টার মধ্যে আপনার পেমেন্ট যাচাই করব। অ্যাক্সেস কোড ইমেইলে আসবে; আমার অ্যাকাউন্টে স্ট্যাটাসও দেখতে পারবেন।`,
 

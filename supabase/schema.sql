@@ -140,6 +140,6 @@ create policy "own sessions" on public.exam_sessions for select using (auth.uid(
 
 -- ===== Example products (change prices and add more in Table Editor → products) =====
 insert into public.products (id, kind, exam, test, title_en, title_bn, price, days, attempts, sort) values
-  ('jlpt-n5-test-02', 'test', 'JLPT-N5', 'N5/test-02', 'JLPT N5 Model Test 02', 'JLPT N5 মডেল টেস্ট ০২', 150, null, 1, 10),
-  ('jlpt-n5-test-03', 'test', 'JLPT-N5', 'N5/test-03', 'JLPT N5 Model Test 03', 'JLPT N5 মডেল টেস্ট ০৩', 150, null, 1, 11),
+  ('jlpt-n5-test-02', 'test', 'JLPT-N5', 'N5/test-02', 'JLPT N5 Model Test 02', 'JLPT N5 মডেল টেস্ট ০২', 500, null, 1, 10),
+  ('jlpt-n5-test-03', 'test', 'JLPT-N5', 'N5/test-03', 'JLPT N5 Model Test 03', 'JLPT N5 মডেল টেস্ট ০৩', 500, null, 1, 11),
   ('jlpt-n5-course-3m', 'course', 'JLPT-N5', null, 'JLPT N5 course: all mock tests, 3 months', 'JLPT N5 কোর্স: সব মক টেস্ট, ৩ মাস', 999, 90, 1, 1);

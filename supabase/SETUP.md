@@ -74,7 +74,7 @@ Then sell it: **Table Editor → products → Insert row**.
 | kind | `test` | `course` |
 | exam | `JLPT-N5` | `JLPT-N5` |
 | test | `N5/test-04` | (empty) |
-| price | taka, e.g. `150` | e.g. `999` |
+| price | taka, e.g. `500` | e.g. `999` |
 | days | (empty) | e.g. `90` |
 | attempts | how many tries, e.g. `1` | (ignored) |
 

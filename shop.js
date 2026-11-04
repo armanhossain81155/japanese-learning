@@ -247,8 +247,11 @@ async function renderShop(filter) {
     </section>`;
 }
 
+const payReady = (m) => !!(m === 'bank' ? BACKEND.payment.bank.accountNumber : BACKEND.payment[m].number);
+
 function payDetails(method, price) {
   const p = BACKEND.payment[method];
+  if (!payReady(method)) return `<p class="small">${t('pay.soon', t(`pay.${method}`))}</p>`;
   if (method === 'bank') {
     return `
       <dl class="pay-dl">
@@ -269,8 +272,8 @@ async function renderBuy(id) {
   renderLoading();
   const p = (await loadProducts()).find(x => x.id === decodeURIComponent(id || ''));
   if (!p) return renderNotFound();
-  const methods = PAY_METHODS.filter(m => m === 'bank' ? BACKEND.payment.bank.accountNumber : BACKEND.payment[m].number);
-  let method = methods[0];
+  // All methods are always listed; one without a number yet says so and takes no payments
+  let method = PAY_METHODS.find(payReady) || PAY_METHODS[0];
 
   const draw = () => {
     app.innerHTML = `
@@ -283,21 +286,19 @@ async function renderBuy(id) {
             <p class="muted">${p.kind === 'course' ? t('shop.courseInfo', p.days) : t('shop.singleInfo', p.attempts)}</p>
             <p class="price big">${fmtTaka(p.price)}</p>
 
-            ${methods.length ? `
               <h3 class="mt-lg">${t('pay.choose')}</h3>
               <div class="pay-tabs" role="tablist">
-                ${methods.map(m => `<button type="button" role="tab" class="pay-tab pay-${m}${m === method ? ' on' : ''}" aria-selected="${m === method}" data-m="${m}">${t(`pay.${m}`)}</button>`).join('')}
+                ${PAY_METHODS.map(m => `<button type="button" role="tab" class="pay-tab pay-${m}${m === method ? ' on' : ''}" aria-selected="${m === method}" data-m="${m}">${t(`pay.${m}`)}</button>`).join('')}
               </div>
               <div class="pay-box">${payDetails(method, p.price)}</div>
 
-              <form id="payForm" class="join-form">
+              ${payReady(method) ? `<form id="payForm" class="join-form">
                 <label>${method === 'bank' ? t('pay.senderBank') : t('pay.sender')}<input name="sender" required maxlength="60" inputmode="${method === 'bank' ? 'text' : 'tel'}"></label>
                 <label>${method === 'bank' ? t('pay.refBank') : t('pay.trx')}<input name="trx" required minlength="6" maxlength="60" autocapitalize="characters" spellcheck="false"></label>
                 <button class="btn btn-primary btn-lg btn-block" type="submit">${t('pay.submit')}</button>
                 <p class="small muted center" id="payMsg" role="status"></p>
-              </form>
-              <p class="small muted">${t('pay.after', BACKEND.verifyHours)}${BACKEND.support ? ` ${t('pay.help', h(BACKEND.support))}` : ''}</p>`
-            : `<p class="notice-bar">${t('pay.none')}</p>`}
+              </form>` : ''}
+              <p class="small muted">${t('pay.after', BACKEND.verifyHours)}${BACKEND.support ? ` ${t('pay.help', h(BACKEND.support))}` : ''}</p>
           </div>
         </div>
       </section>`;
