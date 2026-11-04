@@ -1,0 +1,3 @@
+# Private: test answers must not go online
+model-tests/answer-keys/
+model-tests/live-keys/

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Review — Samurai Syntax</title>
+  <link rel="icon" type="image/png" href="../images/favicon-32.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Hind+Siliguri:wght@400;600&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    body { display: block; }
+    .rv-top { position: sticky; top: 0; z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+    .rv-top .container { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding-top: 12px; padding-bottom: 12px; }
+    .rv-top h1 { font-size: 1.1rem; margin: 0 12px 0 0; }
+    select, .rv-top label { font: inherit; font-size: .9rem; }
+    select { padding: 7px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+    .rv-top label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+    .rv-progress { margin-left: auto; font-size: .85rem; color: var(--muted); }
+    .rv-help { margin: 20px 0; }
+    .rv-help ol { margin: 8px 0 0; padding-left: 20px; }
+    .sec-title { margin: 36px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+    .part-title { margin: 22px 0 10px; color: var(--muted); font-size: .95rem; }
+    .qcard { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+    .qcard.ok { border-left-color: var(--ok); }
+    .qcard.issue { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 4%, var(--surface)); }
+    .qhead { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; font-size: .85rem; color: var(--muted); }
+    .qhead b { color: var(--ink); }
+    .qcard .q-text { font-size: 1.15rem; margin: 6px 0 12px; }
+    .qcard .passage { font-size: 1rem; margin-bottom: 12px; }
+    .ropts { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 6px; }
+    .ropts li { display: flex; gap: 10px; align-items: center; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; cursor: default; }
+    .student .ropts li { cursor: pointer; }
+    .ropts li.correct { border-color: var(--ok); background: var(--ok-soft); font-weight: 600; }
+    .ropts li.picked-wrong { border-color: var(--bad); background: var(--bad-soft); }
+    .ropts li.picked { border-color: var(--n4); }
+    .student .ropts li.correct:not(.revealed) { border-color: var(--line); background: none; font-weight: 400; }
+    .student .exp:not(.revealed) { display: none; }
+    .exp p { margin: 0 0 4px; }
+    .review-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; margin-top: 12px; }
+    .review-actions textarea { flex: 1 1 260px; min-height: 38px; font: inherit; font-size: .9rem; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); resize: vertical; }
+    .btn-ok.on { background: var(--ok); color: #fff; border-color: var(--ok); }
+    .btn-issue.on { background: var(--bad); color: #fff; border-color: var(--bad); }
+    .hidden-q { display: none; }
+    .ropts.pics { grid-template-columns: repeat(4, 1fr); }
+    .ropts.pics li { flex-direction: column; align-items: stretch; gap: 4px; font-size: .85rem; }
+    .ropts.pics img { width: 100%; border-radius: 8px; }
+    @media (max-width: 720px) { .ropts.pics { grid-template-columns: repeat(2, 1fr); } }
+    .export { margin: 30px 0 60px; }
+    .export textarea { width: 100%; min-height: 160px; font: inherit; font-size: .85rem; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+  </style>
+</head>
+<body>
+  <div class="rv-top">
+    <div class="container">
+      <h1>📝 Test Review</h1>
+      <select id="testSelect"></select>
+      <label><input type="checkbox" id="studentMode"> Student mode (answer lukano)</label>
+      <label><input type="checkbox" id="onlyIssues"> Shudhu problem gulo</label>
+      <span class="rv-progress" id="progress"></span>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="card rv-help">
+      <b>Kivabe check korbe:</b>
+      <ol>
+        <li><b>Student mode</b> on kore nije test dao. Option-e click korle thik/bhul dekhabe.</li>
+        <li>Protita question-e <b>✓ Thik ache</b> ba <b>⚠ Problem</b> chapo. Problem hole niche note likho (ki bhul, ki hobe).</li>
+        <li>Listening-e 🔊 chepe audio shono. Script-o dekhte parbe.</li>
+        <li>Shesh hole niche <b>"Copy problems"</b> chepe Claude-ke paste kore dao. Ami thik kore debo.</li>
+      </ol>
+      <p class="small muted" style="margin:8px 0 0">Tomar mark ar note ei browser-e save thake. Pore abar khulle shekhan theke shuru korte parbe.</p>
+    </div>
+    <div id="out"></div>
+    <div class="export card">
+      <h3>Problem list</h3>
+      <p class="small muted">Je question gulo "⚠ Problem" mark korecho, segulo note shoho ekhane ashbe.</p>
+      <textarea id="exportBox" readonly></textarea>
+      <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap">
+        <button class="btn btn-primary" id="copyBtn">Copy problems</button>
+        <button class="btn btn-ghost" id="resetBtn">Ei test-er shob mark muche felo</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const $ = (s, el = document) => el.querySelector(s);
+    const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+    const SECTION_NAMES = { vocab: 'Vocabulary · 文字・語彙', grammar: 'Grammar · Reading · 文法・読解', listening: 'Listening · 聴解' };
+    let types = {}, test = null, key = null, current = '';
+
+    const store = {
+      get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } },
+      set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+    };
+    const marksKey = () => `review-${current}`;
+
+    async function getJson(url) {
+      const r = await fetch(url, { cache: 'no-cache' });
+      if (!r.ok) throw new Error(url);
+      return r.json();
+    }
+
+    // Find every test that has both a question file and an answer key
+    async function findTests() {
+      const found = [];
+      for (const level of ['N5', 'N4', 'N3']) {
+        for (let i = 1; i <= 20; i++) {
+          const name = `test-${String(i).padStart(2, '0')}`;
+          const r = await fetch(`questions/${level}/${name}.json`, { method: 'HEAD', cache: 'no-cache' });
+          if (!r.ok) break;
+          found.push(`${level}/${name}`);
+        }
+      }
+      return found;
+    }
+
+    function speak(script) {
+      if (!('speechSynthesis' in window)) return;
+      speechSynthesis.cancel();
+      const ja = speechSynthesis.getVoices().filter(v => v.lang.startsWith('ja'));
+      script.split('\n').filter(Boolean).forEach(line => {
+        const m = line.match(/^(男|女)：(.*)$/);
+        const u = new SpeechSynthesisUtterance(m ? m[2] : line);
+        u.lang = 'ja-JP';
+        u.rate = 0.9;
+        if (ja.length) u.voice = m && m[1] === '男' && ja[1] ? ja[1] : ja[0];
+        u.pitch = m ? (m[1] === '男' ? 0.6 : 1.3) : 1;
+        speechSynthesis.speak(u);
+      });
+    }
+
+    const scriptHtml = (s) => s.split('\n').map(line => {
+      const m = line.match(/^(男|女)：(.*)$/);
+      return m ? `<p><span class="speaker ${m[1] === '男' ? 'm' : 'f'}">${m[1]}</span>${m[2]}</p>` : `<p class="narr">${line}</p>`;
+    }).join('');
+
+    function render() {
+      const marks = store.get(marksKey(), {});
+      let n = 0;
+      $('#out').innerHTML = test.sections.map(sec => `
+        <h2 class="sec-title">${SECTION_NAMES[sec.id]}</h2>
+        ${sec.parts.map(part => {
+          const tp = types[part.type];
+          return `
+            <h3 class="part-title">${part.label} · ${tp.jp} · ${tp.en} — <span class="small">${tp.instr.bn}</span></h3>
+            ${part.passage ? `<div class="passage jp">${part.passage}</div>` : ''}
+            ${part.questions.map(q => {
+              n++;
+              const k = key[q.id];
+              const m = marks[q.id] || {};
+              return `
+                <article class="qcard ${m.status || ''}" data-id="${q.id}">
+                  <div class="qhead"><b>Q${n}</b><span>${q.id}</span></div>
+                  ${q.passage ? `<div class="passage jp">${q.passage}</div>` : ''}
+                  ${q.audio ? `
+                    <button class="btn btn-ghost btn-sm" data-speak="${q.id}">🔊 Audio shono</button>
+                    <details style="margin:8px 0"><summary class="small">Script dekho</summary><div class="script jp">${scriptHtml(q.audio)}</div></details>` : ''}
+                  ${q.image ? `<img class="q-image" src="${q.image}" alt="">` : ''}
+                  ${q.q ? `<div class="q-text jp">${q.q}</div>` : ''}
+                  ${q.spokenOpts ? '<p class="small muted">🔊 Asol exam-e ei option gulo lekha thake na, shudhu audio-te shona jay.</p>' : ''}
+                  <ul class="ropts ${q.optImages ? 'pics' : ''}">
+                    ${q.opts.map((o, i) => `<li class="${i === k.a ? 'correct' : ''}" data-i="${i}"><span class="opt-num">${i + 1}</span>${q.optImages ? `<img src="${q.optImages[i]}" alt="">` : ''}<span class="jp">${o}</span></li>`).join('')}
+                  </ul>
+                  <div class="exp passage">
+                    <p><b>✓ Answer: ${k.a + 1}</b></p>
+                    <p>🇧🇩 ${k.exp.bn}</p>
+                    <p class="muted">🇬🇧 ${k.exp.en}</p>
+                  </div>
+                  <div class="review-actions">
+                    <button class="btn btn-ghost btn-sm btn-ok ${m.status === 'ok' ? 'on' : ''}">✓ Thik ache</button>
+                    <button class="btn btn-ghost btn-sm btn-issue ${m.status === 'issue' ? 'on' : ''}">⚠ Problem</button>
+                    <textarea placeholder="Note (ki bhul / ki hobe)…">${m.note || ''}</textarea>
+                  </div>
+                </article>`;
+            }).join('')}`;
+        }).join('')}`).join('');
+      bind();
+      applyFilters();
+      update();
+    }
+
+    function setMark(id, patch) {
+      const marks = store.get(marksKey(), {});
+      marks[id] = { ...(marks[id] || {}), ...patch };
+      store.set(marksKey(), marks);
+      update();
+    }
+
+    function bind() {
+      const allQs = test.sections.flatMap(s => s.parts.flatMap(p => p.questions));
+      $$('.qcard').forEach(card => {
+        const id = card.dataset.id;
+        const q = allQs.find(x => x.id === id);
+        $('.btn-ok', card).onclick = () => {
+          const on = !card.classList.contains('ok');
+          card.classList.toggle('ok', on); card.classList.remove('issue');
+          $('.btn-ok', card).classList.toggle('on', on); $('.btn-issue', card).classList.remove('on');
+          setMark(id, { status: on ? 'ok' : '' });
+        };
+        $('.btn-issue', card).onclick = () => {
+          const on = !card.classList.contains('issue');
+          card.classList.toggle('issue', on); card.classList.remove('ok');
+          $('.btn-issue', card).classList.toggle('on', on); $('.btn-ok', card).classList.remove('on');
+          setMark(id, { status: on ? 'issue' : '' });
+          if (on) $('textarea', card).focus();
+        };
+        $('textarea', card).oninput = (e) => setMark(id, { note: e.target.value });
+        const sp = $('[data-speak]', card);
+        if (sp) sp.onclick = () => speak(q.spokenOpts ? [q.audio, ...q.opts.map((o, i) => `${i + 1}、${o}`)].join('\n') : q.audio);
+        // Student mode: pick an option, then reveal the answer
+        $$('.ropts li', card).forEach(li => li.onclick = () => {
+          if (!document.body.classList.contains('student')) return;
+          $$('.ropts li', card).forEach(x => x.classList.remove('picked', 'picked-wrong'));
+          li.classList.add(li.classList.contains('correct') ? 'picked' : 'picked-wrong');
+          $('.ropts li.correct', card).classList.add('revealed');
+          $('.exp', card).classList.add('revealed');
+        });
+      });
+    }
+
+    function applyFilters() {
+      document.body.classList.toggle('student', $('#studentMode').checked);
+      const only = $('#onlyIssues').checked;
+      $$('.qcard').forEach(c => c.classList.toggle('hidden-q', only && !c.classList.contains('issue')));
+    }
+
+    function update() {
+      const marks = store.get(marksKey(), {});
+      const total = $$('.qcard').length;
+      const ok = Object.values(marks).filter(m => m.status === 'ok').length;
+      const issues = Object.entries(marks).filter(([, m]) => m.status === 'issue');
+      $('#progress').textContent = `${ok + issues.length}/${total} check kora · ✓ ${ok} · ⚠ ${issues.length}`;
+      $('#exportBox').value = issues.length
+        ? `${current} — problem list:\n` + issues.map(([id, m]) => `- ${id}: ${m.note || '(note nei)'}`).join('\n')
+        : '';
+    }
+
+    async function load(name) {
+      current = name;
+      store.set('review-last', name);
+      $('#out').innerHTML = '<p class="muted">Loading…</p>';
+      [test, key] = await Promise.all([getJson(`questions/${name}.json`), getJson(`answer-keys/${name}.json`).then(k => k.answers)]);
+      render();
+    }
+
+    (async () => {
+      if (location.protocol === 'file:') {
+        $('#out').innerHTML = '<div class="notice-bar">⚠ Ei page file double-click kore khulle question dekhabe na.<br><b>japanese-learning</b> folder-er <b>start-review.bat</b> file-ta double-click koro, page nijei sothik bhabe khule jabe.</div>';
+        return;
+      }
+      types = await getJson('shared/types.json');
+      const tests = await findTests();
+      $('#testSelect').innerHTML = tests.map(t => `<option>${t}</option>`).join('');
+      const last = store.get('review-last', tests[0]);
+      $('#testSelect').value = tests.includes(last) ? last : tests[0];
+      $('#testSelect').onchange = (e) => load(e.target.value);
+      $('#studentMode').onchange = applyFilters;
+      $('#onlyIssues').onchange = applyFilters;
+      $('#copyBtn').onclick = async () => {
+        try { await navigator.clipboard.writeText($('#exportBox').value); $('#copyBtn').textContent = 'Copied ✓'; }
+        catch (e) { $('#exportBox').select(); }
+        setTimeout(() => $('#copyBtn').textContent = 'Copy problems', 1500);
+      };
+      $('#resetBtn').onclick = () => {
+        if (confirm('Ei test-er shob mark ar note muche felbe?')) { store.set(marksKey(), {}); render(); }
+      };
+      speechSynthesis && speechSynthesis.getVoices();
+      load($('#testSelect').value);
+    })();
+  </script>
+</body>
+</html>

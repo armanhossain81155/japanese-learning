@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samurai Syntax — JLPT Mock Tests</title>
+  <meta name="description" content="Samurai Syntax — free JLPT N5, N4 and N3 mock tests with timer, listening audio, scaled scoring and detailed explanations.">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="images/favicon-192.png">
+  <link rel="apple-touch-icon" href="images/favicon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Apply saved theme before paint to avoid a flash
+    try {
+      const t = localStorage.getItem('nd-theme');
+      if (t) document.documentElement.dataset.theme = t;
+      document.documentElement.lang = localStorage.getItem('nd-lang') || 'en';
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="#/" class="logo">
+        <img class="logo-mark" src="images/favicon-192.png" alt="Samurai Syntax logo" width="40" height="40">
+        <span class="logo-text">Samurai<b>Syntax</b></span>
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#/" data-route="home" data-i18n="nav.home">Home</a>
+        <a href="#/tests" data-route="tests" data-i18n="nav.tests">Mock Tests</a>
+        <a href="#/live" data-route="live" data-i18n="nav.live" class="nav-live">Live Exam</a>
+        <a href="#/study" data-route="study" data-i18n="nav.study">Kana</a>
+        <a href="#/history" data-route="history" data-i18n="nav.history">My Results</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="lang-btn" id="langToggle" data-i18n-attr="aria-label:lang.title">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          <span data-i18n="lang.switch">বাংলা</span>
+        </button>
+        <button class="icon-btn" id="themeToggle" data-i18n-attr="aria-label:theme" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></svg>
+        </button>
+        <button class="icon-btn menu-btn" id="menuBtn" data-i18n-attr="aria-label:menu" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="app"></main>
+
+  <footer class="footer" id="footer">
+    <div class="footer-inner">
+      <div>
+        <a href="#/" class="logo"><img class="logo-mark" src="images/favicon-192.png" alt="Samurai Syntax logo" width="40" height="40"><span class="logo-text">Samurai<b>Syntax</b></span></a>
+        <p class="muted" data-i18n="footer.about">Practice tests modelled on the official JLPT format. Not affiliated with the Japan Foundation or JEES.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#/test/N5" data-i18n="footer.mock" data-i18n-arg="N5">N5 Mock Test</a>
+        <a href="#/test/N4" data-i18n="footer.mock" data-i18n-arg="N4">N4 Mock Test</a>
+        <a href="#/test/N3" data-i18n="footer.mock" data-i18n-arg="N3">N3 Mock Test</a>
+        <a href="#/study" data-i18n="footer.kana">Kana Chart</a>
+      </div>
+    </div>
+    <p class="footer-copy">© <span id="year"></span> Samurai Syntax · 侍の道で日本語を · がんばって！</p>
+  </footer>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <h3 id="modalTitle"></h3>
+      <p id="modalText"></p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="modalCancel" data-i18n="modal.cancel">Cancel</button>
+        <button class="btn btn-primary" id="modalOk">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="i18n.js"></script>
+  <script src="live-config.js"></script>
+  <script src="live.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

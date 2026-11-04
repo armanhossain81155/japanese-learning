@@ -1,0 +1,27 @@
+{
+  "_note": "Question counts per part, based on the current JLPT format (after the 2020 revision). Verify against jlpt.jp before publishing.",
+  "N5": {
+    "time": { "vocab": 20, "grammar": 40, "listening": 30 },
+    "sections": {
+      "vocab": { "kanji-reading": 7, "orthography": 5, "context": 6, "paraphrase": 3 },
+      "grammar": { "grammar-form": 9, "composition": 4, "text-grammar": 4, "short-passage": 2, "mid-passage": 2, "info-retrieval": 1 },
+      "listening": { "task": 7, "point": 6, "verbal": 5, "quick": 6 }
+    }
+  },
+  "N4": {
+    "time": { "vocab": 25, "grammar": 55, "listening": 35 },
+    "sections": {
+      "vocab": { "kanji-reading": 7, "orthography": 5, "context": 8, "paraphrase": 4, "usage": 4 },
+      "grammar": { "grammar-form": 13, "composition": 4, "text-grammar": 4, "short-passage": 3, "mid-passage": 3, "info-retrieval": 2 },
+      "listening": { "task": 8, "point": 7, "verbal": 5, "quick": 8 }
+    }
+  },
+  "N3": {
+    "time": { "vocab": 30, "grammar": 70, "listening": 40 },
+    "sections": {
+      "vocab": { "kanji-reading": 8, "orthography": 6, "context": 11, "paraphrase": 5, "usage": 5 },
+      "grammar": { "grammar-form": 13, "composition": 5, "text-grammar": 5, "short-passage": 4, "mid-passage": 6, "long-passage": 4, "info-retrieval": 2 },
+      "listening": { "task": 6, "point": 6, "summary": 3, "verbal": 4, "quick": 9 }
+    }
+  }
+}
