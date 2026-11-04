@@ -19,7 +19,7 @@ const GRACE_MINUTES = 5;
 
 const HEADERS = [
   'Received', 'Exam ID', 'Name', 'Roll / Email', 'Test', 'Score', 'Max', 'Result',
-  'Correct', 'Questions', 'Section scores', 'Tab switches', 'Time up', 'Started', 'Submitted', 'Answers'
+  'Correct', 'Questions', 'Section scores', 'Tab switches', 'Time up', 'Started', 'Submitted', 'Answers', 'Screenshot attempts'
 ];
 
 function doGet() {
@@ -55,7 +55,8 @@ function doPost(e) {
     sheet.appendRow([
       new Date(), examId, name, roll, keyRow.key.test, score.total, score.max, score.passed ? 'PASS' : 'FAIL',
       score.correct, score.count, JSON.stringify(score.cats), Number(data.tabSwitches) || 0,
-      data.timeUp ? 'yes' : '', String(data.startedAt || ''), String(data.submittedAt || ''), JSON.stringify(data.answers || {})
+      data.timeUp ? 'yes' : '', String(data.startedAt || ''), String(data.submittedAt || ''), JSON.stringify(data.answers || {}),
+      Number(data.shots) || 0
     ]);
     return json_(Object.assign({ ok: true }, score));
   } catch (err) {

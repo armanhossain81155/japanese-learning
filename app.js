@@ -188,6 +188,7 @@ function endExam() {
   stopSpeech();
   exam = null;
   document.body.classList.remove('in-exam');
+  protectOff();
 }
 
 function tick() {
@@ -307,6 +308,21 @@ function levelCard(level) {
     </article>`;
 }
 
+function examCard(ex) {
+  return `
+    <article class="level-card exam-card" style="--c:${ex.color}">
+      <div class="level-head">
+        <span class="level-badge">${ex.name}</span>
+        <span class="chip${ex.ready ? ' chip-ready' : ''}">${t(ex.ready ? 'exams.ready' : 'exams.soon')}</span>
+      </div>
+      <h3 class="jp">${ex.jp}</h3>
+      <p class="muted">${L(ex.desc)}</p>
+      <ul class="exam-chips">${ex.chips.map(c => `<li>${typeof c === 'string' ? c : L(c)}</li>`).join('')}</ul>
+      ${ex.ready ? `<a class="btn btn-primary btn-sm" href="${ex.href}">${t('exams.open')}</a>`
+        : `<span class="btn btn-ghost btn-sm" aria-disabled="true">${t('exams.soon')}</span>`}
+    </article>`;
+}
+
 function renderHome() {
   const totalQ = Object.values(LEVELS).reduce((n, l) => n + countQuestions(l), 0);
   app.innerHTML = `
@@ -321,7 +337,7 @@ function renderHome() {
             <a href="#/study" class="btn btn-ghost btn-lg">${t('hero.cta2')}</a>
           </div>
           <ul class="hero-stats">
-            <li><b>3</b><span>${t('hero.stat1')}</span></li>
+            <li><b>${EXAMS.length}</b><span>${t('hero.stat1')}</span></li>
             <li><b>${totalQ}+</b><span>${t('hero.stat2')}</span></li>
             <li><b>聴解</b><span>${t('hero.stat3')}</span></li>
           </ul>
@@ -352,6 +368,17 @@ function renderHome() {
     <section class="section">
       <div class="container">
         <div class="section-head">
+          <span class="eyebrow">${t('exams.eyebrow')}</span>
+          <h2>${t('exams.title')}</h2>
+          <p class="muted">${t('exams.sub')}</p>
+        </div>
+        <div class="exam-grid">${EXAMS.map(examCard).join('')}</div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="container">
+        <div class="section-head">
           <span class="eyebrow">${t('levels.eyebrow')}</span>
           <h2>${t('levels.title')}</h2>
           <p class="muted">${t('levels.sub')}</p>
@@ -360,7 +387,7 @@ function renderHome() {
       </div>
     </section>
 
-    <section class="section alt">
+    <section class="section">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">${t('format.eyebrow')}</span>
@@ -377,7 +404,7 @@ function renderHome() {
       </div>
     </section>
 
-    <section class="section">
+    <section class="section alt">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">${t('features.eyebrow')}</span>
@@ -394,7 +421,7 @@ function renderHome() {
       </div>
     </section>
 
-    <section class="section alt">
+    <section class="section">
       <div class="container">
         <div class="section-head">
           <span class="eyebrow">${t('tips.eyebrow')}</span>
@@ -410,7 +437,7 @@ function renderHome() {
       </div>
     </section>
 
-    <section class="section">
+    <section class="section alt">
       <div class="container">
         <div class="cta-band">
           <div>
@@ -533,6 +560,7 @@ function renderLevel(levelId) {
 function renderExam() {
   if (!exam) return;
   document.body.classList.add('in-exam');
+  protectOn();
   const { level, mode, items, answers, flags, cur } = exam;
   const it = items[cur];
   const { section, group, q } = it;

@@ -578,3 +578,31 @@ const TIPS = [
       'ভুল উত্তরে নম্বর কাটা যায় না। সময় শেষ হয়ে এলে আন্দাজে উত্তর দিন।')
   }
 ];
+
+// Exams shown on the home page. Only JLPT has tests so far; the others are announced as coming soon.
+const EXAMS = [
+  {
+    id: 'jlpt', name: 'JLPT', jp: '日本語能力試験', color: 'var(--n3)', ready: true, href: '#/tests',
+    desc: T('Japanese-Language Proficiency Test. Needed for study, jobs and visas in Japan.',
+      'জাপানি ভাষা দক্ষতা পরীক্ষা। জাপানে পড়াশোনা, চাকরি ও ভিসার জন্য দরকার।'),
+    chips: ['N5', 'N4', 'N3']
+  },
+  {
+    id: 'jft', name: 'JFT-Basic', jp: '国際交流基金日本語基礎テスト', color: 'var(--n4)',
+    desc: T('Japan Foundation Test for Basic Japanese (A2). Accepted for the SSW visa. Computer-based, scored 10–250, pass mark 200.',
+      'জাপান ফাউন্ডেশনের বেসিক জাপানি টেস্ট (A2)। SSW ভিসার জন্য গ্রহণযোগ্য। কম্পিউটারে পরীক্ষা, স্কোর ১০–২৫০, পাস মার্ক ২০০।'),
+    chips: [T('Script & Vocabulary', 'লিপি ও শব্দ'), T('Conversation', 'কথোপকথন'), T('Listening', 'শ্রবণ'), T('Reading', 'পঠন')]
+  },
+  {
+    id: 'ssw', name: 'SSW', jp: '特定技能評価試験', color: 'var(--warn)',
+    desc: T('Specified Skilled Worker skill tests. Each job field has its own test.',
+      'স্পেসিফাইড স্কিলড ওয়ার্কার (তোকুতেই গিনো) দক্ষতা পরীক্ষা। প্রতিটি কাজের ক্ষেত্রের আলাদা পরীক্ষা।'),
+    chips: ['介護', '外食業', '飲食料品製造業', '農業', 'ビルクリーニング']
+  },
+  {
+    id: 'nat', name: 'NAT-TEST', jp: '日本語NAT-TEST', color: 'var(--n5)',
+    desc: T('Japanese proficiency test held every two months. Levels 5Q to 1Q match JLPT N5 to N1.',
+      'প্রতি দুই মাস পর পর হওয়া জাপানি ভাষা পরীক্ষা। ৫কিউ থেকে ১কিউ লেভেল JLPT N5 থেকে N1-এর সমান।'),
+    chips: ['5級', '4級', '3級', '2級', '1級']
+  }
+];

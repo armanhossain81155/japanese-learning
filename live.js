@@ -238,7 +238,7 @@ async function startLiveExam(ex, student) {
     endsAt,
     minutes: ex.minutes,
     timerId: null,
-    live: { ex, student, tabSwitches: saved ? saved.tabSwitches : 0 }
+    live: { ex, student, tabSwitches: saved ? saved.tabSwitches : 0, shots: saved ? saved.shots || 0 : 0 }
   };
   saveLiveProgress();
   exam.timerId = setInterval(tick, 1000);
@@ -254,7 +254,7 @@ function saveLiveProgress() {
   });
   store.set(liveStore.progressKey(exam.live.ex.id), {
     student: exam.live.student, startedAt: exam.startedAt, cur: exam.cur,
-    flags: [...exam.flags], tabSwitches: exam.live.tabSwitches, answers, orders
+    flags: [...exam.flags], tabSwitches: exam.live.tabSwitches, shots: exam.live.shots, answers, orders
   });
 }
 
@@ -276,7 +276,7 @@ async function resumeLive(id) {
 async function submitLive(timeUp) {
   if (exam.live.submitting) return;
   exam.live.submitting = true;
-  const { ex, student, tabSwitches } = exam.live;
+  const { ex, student, tabSwitches, shots } = exam.live;
   clearInterval(exam.timerId);
   saveLiveProgress();
   const answers = {};
@@ -286,7 +286,7 @@ async function submitLive(timeUp) {
   const payload = {
     examId: ex.id, test: ex.test, level: ex.level,
     name: student.name, roll: student.roll,
-    answers, tabSwitches, timeUp: !!timeUp,
+    answers, tabSwitches, shots, timeUp: !!timeUp,
     startedAt: new Date(exam.startedAt).toISOString(),
     submittedAt: new Date().toISOString()
   };
