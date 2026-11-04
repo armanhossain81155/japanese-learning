@@ -3,16 +3,28 @@
 // transaction ID; an admin checks it and approves, and the buyer gets an access code by email.
 // Paid questions come from the `api` edge function (supabase/functions/api), never from this repo.
 
-const shopOn = !!(BACKEND.supabaseUrl && BACKEND.supabaseAnonKey);
+// ?preview in the URL shows these pages with sample data and no backend (preview.js)
+const preview = new URLSearchParams(location.search).has('preview');
+const shopOn = preview || !!(BACKEND.supabaseUrl && BACKEND.supabaseAnonKey);
 let sb = null;
+
+function loadScript(src) {
+  return new Promise((resolve) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = () => resolve(true);
+    s.onerror = () => resolve(false);
+    document.head.appendChild(s);
+  });
+}
+
 // supabase-js is only downloaded when accounts are configured
-const sbReady = shopOn ? new Promise((resolve) => {
-  const s = document.createElement('script');
-  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
-  s.onload = () => { sb = supabase.createClient(BACKEND.supabaseUrl, BACKEND.supabaseAnonKey); resolve(); };
-  s.onerror = () => resolve();
-  document.head.appendChild(s);
-}) : Promise.resolve();
+const sbReady = preview
+  ? loadScript('preview.js').then(ok => { if (ok) sb = previewClient(); })
+  : shopOn
+    ? loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js')
+      .then(ok => { if (ok) sb = supabase.createClient(BACKEND.supabaseUrl, BACKEND.supabaseAnonKey); })
+    : Promise.resolve();
 const auth = { user: null, ready: false, me: null };
 const PAY_METHODS = ['bkash', 'nagad', 'rocket', 'bank'];
 const HEARTBEAT_MS = 30000;
@@ -117,11 +129,18 @@ function renderNoBackend() {
 }
 
 // ===== Login / sign-up / password =====
+// Back to the page that asked for a login (for example a payment page)
+function goAfterLogin() {
+  const next = store.get('nd-after-login', null);
+  store.set('nd-after-login', null);
+  location.hash = next || '#/account';
+}
+
 function renderAuth(mode) {
   if (!shopOn) return renderNoBackend();
   if (!auth.ready) return renderLoading();
   if (!sb) return renderNoBackend();
-  if (auth.user && mode !== 'new-password') { location.hash = '#/account'; return; }
+  if (auth.user && mode !== 'new-password') return goAfterLogin();
   const msg = store.get('nd-auth-msg', null);
   if (msg) store.set('nd-auth-msg', null);
   const signup = mode === 'signup';
@@ -164,12 +183,7 @@ function renderAuth(mode) {
     const redirect = location.origin + location.pathname;
     if (mode === 'login') {
       ({ error } = await sb.auth.signInWithPassword({ email: d.email.trim(), password: d.password }));
-      if (!error) {
-        const next = store.get('nd-after-login', '#/account');
-        store.set('nd-after-login', null);
-        location.hash = next || '#/account';
-        return;
-      }
+      if (!error) return goAfterLogin();
     } else if (mode === 'signup') {
       let data;
       ({ data, error } = await sb.auth.signUp({
@@ -177,6 +191,7 @@ function renderAuth(mode) {
         options: { data: { name: d.name.trim(), phone: d.phone.trim() }, emailRedirectTo: redirect }
       }));
       if (!error && !data.session) { out.textContent = t('auth.checkEmail'); return; }
+      if (!error) return goAfterLogin();
     } else if (mode === 'forgot') {
       ({ error } = await sb.auth.resetPasswordForEmail(d.email.trim(), { redirectTo: redirect }));
       if (!error) { out.textContent = t('auth.resetSent'); return; }
