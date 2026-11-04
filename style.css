@@ -670,7 +670,7 @@ body.in-exam img { -webkit-user-drag: none; pointer-events: none; }
   background-repeat: repeat; opacity: .14;
 }
 .shield { display: none; }
-body.shielded #app { filter: blur(18px); }
+body.shielded #app { visibility: hidden; }
 body.shielded .shield {
   display: grid; place-items: center; position: fixed; inset: 0; z-index: 110; width: 100%;
   padding: 24px; border: 0; background: color-mix(in srgb, var(--bg) 70%, transparent);

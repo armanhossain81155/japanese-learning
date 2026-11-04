@@ -66,6 +66,13 @@ function shield() {
 
 document.addEventListener('keydown', (e) => {
   if (!protect.on) return;
+  // Windows key: Win+Shift+S (Snipping Tool) is handled by Windows and never reaches the page,
+  // but the Windows key itself usually does. Hide the questions at once, before S is pressed.
+  if (e.key === 'Meta' || e.key === 'OS') {
+    protect.metaAt = Date.now();
+    shield();
+    return;
+  }
   const k = e.key.toLowerCase();
   const mod = e.ctrlKey || e.metaKey;
   // Print, save, view source, copy; developer tools; macOS screenshot shortcuts
@@ -81,5 +88,13 @@ document.addEventListener('keyup', (e) => {
   if (protect.on && e.key === 'PrintScreen') recordShot();
 });
 
-// Snipping tools and screen recorders usually take focus from the page
-window.addEventListener('blur', shield);
+// Snipping tools and screen recorders usually take focus from the page.
+// Losing focus right after the Windows key means a Win+Shift+S snip: count it.
+window.addEventListener('blur', () => {
+  if (protect.on && protect.metaAt && Date.now() - protect.metaAt < 2000) {
+    protect.metaAt = 0;
+    recordShot();
+  } else {
+    shield();
+  }
+});
